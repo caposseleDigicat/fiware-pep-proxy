@@ -21,21 +21,20 @@ var Root = (function() {
 
     	if (auth_token === undefined) {
             log.error('Auth-token not found in request header');
-            var auth_header = 'IDM uri = ' + config.idm_host;
+            var auth_header = 'IDM uri = ' + config.account_host;
             res.set('WWW-Authenticate', auth_header);
-    		res.status(401).send('Auth-token not found in request header');
+            res.status(401).send('Auth-token not found in request header');
     	} else {
 
             if (config.magic_key && config.magic_key === auth_token) {
                 var options = {
-                    host: config.app.host,
-                    port: config.app.port,
+                    host: config.app_host,
+                    port: config.app_port,
                     path: req.url,
                     method: req.method,
                     headers: proxy.getClientIp(req, req.headers)
                 };
-                var protocol = config.app.ssl ? 'https' : 'http';
-                proxy.sendData(protocol, options, req.body, res);
+                proxy.sendData('http', options, req.body, res);
                 return;
 
             }
@@ -69,7 +68,7 @@ var Root = (function() {
     		}, function (status, e) {
     			if (status === 404 || status === 401) {
                     log.error('User access-token not authorized');
-                    res.status(401).send('User token not authorized');
+                    res.status(401).send('User access-token not authorized. Token invalid or expired');
                 } else {
                     log.error('Error in IDM communication ', e);
                     res.status(503).send('Error in IDM communication');
@@ -88,19 +87,26 @@ var Root = (function() {
 
             log.info('Access-token OK. Redirecting to app...');
 
-            req.headers['X-Nick-Name'] = user_info.id;
-            req.headers['X-Display-Name'] = user_info.displayName;
-            req.headers['X-Roles'] = JSON.stringify(user_info.roles);
-            req.headers['X-Organizations'] = JSON.stringify(user_info.organizations);
+            if (config.tokens_engine === 'keystone') {
+                req.headers['X-Nick-Name'] = user_info.token.user.id;
+                req.headers['X-Display-Name'] = user_info.token.user.id;
+                req.headers['X-Roles'] = user_info.token.roles;
+                req.headers['X-Organizations'] = user_info.token.project;
+            } else {
+                req.headers['X-Nick-Name'] = user_info.id;
+                req.headers['X-Display-Name'] = user_info.displayName;
+                req.headers['X-Roles'] = JSON.stringify(user_info.roles);
+                req.headers['X-Organizations'] = JSON.stringify(user_info.organizations);
+            }
         } else {
             log.info('Public path. Redirecting to app...');
         }
 
-        var protocol = config.app.ssl ? 'https' : 'http';
+        var protocol = config.app_ssl ? 'https' : 'http';
 
         var options = {
-            host: config.app.host,
-            port: config.app.port,
+            host: config.app_host,
+            port: config.app_port,
             path: req.url,
             method: req.method,
             headers: proxy.getClientIp(req, req.headers)

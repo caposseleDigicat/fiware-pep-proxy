@@ -22,16 +22,13 @@ var app = express();
 //app.use(express.bodyParser());
 
 app.use (function(req, res, next) {
-
     var bodyChunks = [];
     req.on('data', function(chunk) { 
        bodyChunks.push(chunk);
     });
 
     req.on('end', function() {
-        if (bodyChunks.length > 0) {
-            req.body = Buffer.concat(bodyChunks);
-        };
+        req.body = Buffer.concat(bodyChunks);
         next();
     });
 });
@@ -67,7 +64,12 @@ for (var p in config.public_paths) {
 
 app.all('/*', Root.pep);
 
-log.info('Starting PEP proxy in port ' + port + '. IdM authentication ...');
+if (config.tokens_engine === 'keystone' && config.azf.enabled === true) {
+    log.error('Keystone token engine is not compatible with AuthZForce. Please review configuration file.');
+    return;
+}
+
+log.info('Starting PEP proxy in port ' + port + '. Keystone authentication ...');
 
 IDM.authenticate (function (token) {
 

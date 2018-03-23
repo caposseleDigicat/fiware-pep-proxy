@@ -17,7 +17,7 @@
 
 ## Introduction
 
-Welcome to the Installation and Administration Guide of the PEP Proxy GE. PEP Proxy provides a security layer for adding authentication and authorization filters to FIWARE GEs and any backend service. It is the PEP (Police Enforcement Point) of the FIWARE Security Chapter. So together with Identity Management and Authorization PDP GEs provides security to FIWARE backends.
+Welcome to the User and Programmer Guide of the PEP Proxy GE. PEP Proxy provides a security layer for adding authentication and authorization filters to FIWARE GEs and any backend service. It is the PEP (Police Enforcement Point) of the FIWARE Security Chapter. So together with Identity Management and Authorization PDP GEs provides security to FIWARE backends.
 
 **Note:** The PEP Proxy GE is a backend component, therefore for this GE there is no need to provide a user guide.
 
@@ -52,14 +52,16 @@ To configure PEP Proxy you can copy the file named config.js.template to config.
 <pre>
  var config = {};
 
- config.idm_host = 'https://account.lab.fiware.org';
+ config.account_host = 'https://account.lab.fiware.org';
 
- config.app.host = 'www.google.es';
- config.app.port = '80';
+ config.keystone_host = 'cloud.lab.fiware.org';
+ config.keystone_port = 4731;
 
- config.pep.app_id = 'my_app_id';
- config.pep.username = 'pepProxy';
- config.pep.password = 'pepProxy';
+ config.app_host = 'www.google.es';
+ config.app_port = '80';
+
+ config.username = 'pepProxy';
+ config.password = 'pepProxy';
 
  config.check_permissions = false;
 
@@ -73,7 +75,7 @@ You can also configure the connection to an [Authorization PDP GE](http://catalo
 <pre>
 	config.azf = {
 		enabled: true,
-		ssl: false,
+		protocol: 'http',
 	    host: 'azf_host',
 	    port: 6019,
 	    custom_policy: undefined
