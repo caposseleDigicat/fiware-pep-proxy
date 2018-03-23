@@ -1,7 +1,5 @@
 FROM ubuntu:14.04
 
-MAINTAINER FIWARE Wilma PEP Proxy Team. DIT-UPM
-
 WORKDIR /opt
 
 # Install Ubuntu dependencies
