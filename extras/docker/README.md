@@ -9,7 +9,7 @@ Both options require that you have [docker](https://docs.docker.com/installation
 
 ## Build your own image and run the container from it
 
-You have to download the [Wilma's code](https://github.com/ging/fiware-pep-proxy) from GitHub and navigate to `extras/docker` directory. There, to compile your own image just run:
+You have to download the [Wilma's code](https://github.com/caposseleDigicat/fiware-pep-proxy/tree/Synchronicity) from GitHub and navigate to `extras/docker` directory. There, to compile your own image just run:
 
 	sudo docker build -t pep-proxy-image .
 
@@ -34,7 +34,7 @@ Where the different params mean:
 
 * -d indicates that the container runs as a daemon
 * --name is the name of the new container (you can use the name you want)
-* -v stablishes a relation between a local folder (in your host computer) and a container's folder. In this case it is used to pass to the container the configuration file that PEP Proxy needs to work. `host_config_file` has to be the location of a local file with that configuration following the [config template](https://github.com/ging/fiware-pep-proxy/blob/master/config.js.template).
+* -v stablishes a relation between a local folder (in your host computer) and a container's folder. In this case it is used to pass to the container the configuration file that PEP Proxy needs to work. `host_config_file` has to be the location of a local file with that configuration following the [config template](https://github.com/caposseleDigicat/fiware-pep-proxy/blob/Synchronicity/config.js.template).
 * -p stablishes a relation between a local port and a container's port. You can use the port you want in `host_port` but `container_port` has to be the same that you have set in `config.app_port` in your config file. If you have set `config.https` to `true` you have to use here the https port.
 * the last param is the name of the image
 
@@ -56,9 +56,9 @@ To stop the container:
 
 ## Run the container from the last release in Docker Hub
 
-You can also run the container from the [image we provide](https://hub.docker.com/r/ging/pep-proxy/) in Docker Hub. In this case you have only to execute the run command. But now the image name is ging/pep-proxy:*version* where `version` is the release you want to use:
+You can also run the container from the [image we provide](https://hub.docker.com/r/angelocapossele/pep-proxy/) in Docker Hub. In this case you have only to execute the run command. But now the image name is angelocapossele/pep-proxy:*version* where `version` is the release you want to use:
 
-	sudo docker run -d --name pep-proxy-container -v [host_config_file]:/opt/fiware-pep-proxy/config.js -p [host_port]:[container_port] ging/pep-proxy
+	sudo docker run -d --name pep-proxy-container -v [host_config_file]:/opt/fiware-pep-proxy/config.js -p [host_port]:[container_port] angelocapossele/pep-proxy
 
 > **Note**
 > If you do not specify a version you are pulling from `latest` by default.
