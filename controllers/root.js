@@ -1,7 +1,8 @@
 var config = require('./../config.js'),
     proxy = require('./../lib/HTTPClient.js'),
     IDM = require('./../lib/idm.js').IDM,
-    AZF = require('./../lib/azf.js').AZF;
+    AZF = require('./../lib/azf.js').AZF,
+    RBAC = require('./../lib/rbac.js').RBAC;
 
 var log = require('./../lib/logger').logger.getLogger("Root");
 
@@ -60,7 +61,10 @@ var Root = (function() {
                         }
 
                     }, tokens_cache);
-                } else {
+                } else if (config.rbac){
+                    if (RBAC.check_permissions(auth_token, user_info, req))
+                        redir_request(req, res, user_info);
+                } else{
                     redir_request(req, res, user_info);
                 }
 

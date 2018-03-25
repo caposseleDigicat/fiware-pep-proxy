@@ -28,6 +28,10 @@ config.password = '';
 // in seconds
 config.cache_time = 300;
 
+// if enabled PEP checks permissions with RBAC. 
+// only compatible with oauth2 tokens engine
+config.rbac = true;
+
 // if enabled PEP checks permissions with AuthZForce GE. 
 // only compatible with oauth2 tokens engine
 //

@@ -21,10 +21,121 @@ Notes
 var xml2json = require('xml2json'),
     escapeXML = require('escape-html');
 
-exports.getPolicy = function (roles, req, app_id) {
+exports.getPolicy = function (roles, action, resource, service, app_id) {
 	var xml;
 
-    // operations
+	log.info("Checking authorization to roles", roles, "to do ", action, " on ", resource, "with service ", service, "and app ", app_id);
 
-    return xml;
-}
+	var XACMLPolicy = {
+		"Request":{
+			"xmlns":"urn:oasis:names:tc:xacml:3.0:core:schema:wd-17",
+			"CombinedDecision": "false",
+			"ReturnPolicyIdList":"false",
+			"Attributes":[
+				{
+					"Category":"urn:oasis:names:tc:xacml:1.0:subject-category:access-subject",
+					"Attribute":[
+
+						// ?????
+						// {
+						//     "AttributeId":"urn:oasis:names:tc:xacml:1.0:subject:subject-id",
+						//     "IncludeInResult": "false",
+						//     "AttributeValue":{
+						//         "DataType":"http://www.w3.org/2001/XMLSchema#string",
+						//         "$t":"joe"
+						//     }
+						// },
+						 
+						// Include the role Attribute if and only if the user has at least one role, since the XACML schema requires at least one AttributeValue in a <Attribute> element
+						//{
+						//    "AttributeId":"urn:oasis:names:tc:xacml:2.0:subject:role",
+						//    "IncludeInResult": "false",
+						//    "AttributeValue": [
+								// One per role
+								// {
+								// "DataType":"http://www.w3.org/2001/XMLSchema#string",
+								// "$t":"Manager"
+								// }
+						//    ]
+						//}
+					]
+				},
+				{
+					"Category":"urn:oasis:names:tc:xacml:3.0:attribute-category:resource",
+					"Attribute":[
+						{
+							"AttributeId":"urn:oasis:names:tc:xacml:1.0:resource:resource-id",
+							"IncludeInResult": "false",
+							"AttributeValue":{
+								"DataType":"http://www.w3.org/2001/XMLSchema#string",
+								"$t": app_id
+							}
+						},
+						{
+							"AttributeId":"urn:thales:xacml:2.0:resource:sub-resource-id",
+							"IncludeInResult": "false",
+							"AttributeValue":{
+								"DataType":"http://www.w3.org/2001/XMLSchema#string",
+								"$t": escapeXML(resource)
+							}
+						},
+						{
+							"AttributeId":"urn:thales:xacml:2.0:resource:sub-resource-id",
+							"IncludeInResult": "false",
+							"AttributeValue":{
+								"DataType":"http://www.w3.org/2001/XMLSchema#string",
+								"$t": escapeXML(service)
+							}
+						}
+					]
+				},
+				{
+					"Category":"urn:oasis:names:tc:xacml:3.0:attribute-category:action",
+					"Attribute":{
+						"AttributeId":"urn:oasis:names:tc:xacml:1.0:action:action-id",
+						"IncludeInResult": "false",
+						"AttributeValue":{
+							"DataType":"http://www.w3.org/2001/XMLSchema#string",
+							"$t": action
+						}
+					}
+				},
+				{
+					"Category":"urn:oasis:names:tc:xacml:3.0:attribute-category:environment"
+				}
+			]
+		}
+	};
+
+	// create Attribute only roles is not empty because XACML schema requires that an Attribute has at least one AttributeValue
+	if(roles.length > 0) {
+		XACMLPolicy.Request.Attributes[0].Attribute[0] = 
+						 {
+							"AttributeId":"urn:oasis:names:tc:xacml:2.0:subject:role",
+							"IncludeInResult": "false",
+							"AttributeValue": [
+								// One per role
+								// {
+								// "DataType":"http://www.w3.org/2001/XMLSchema#string",
+								// "$t":"Manager"
+								// }
+							]
+						};
+
+		for (var i in roles) {
+			XACMLPolicy.Request.Attributes[0].Attribute[0].AttributeValue[i] = {
+				//"AttributeId":"urn:oasis:names:tc:xacml:2.0:subject:role",
+				//"IncludeInResult": "false",
+				//"AttributeValue":{
+					"DataType":"http://www.w3.org/2001/XMLSchema#string",
+					"$t": roles[i]
+				//}
+			};
+		}
+	}
+
+	xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' + xml2json.toXml(XACMLPolicy);
+
+	log.debug('XML: ', xml);
+	return xml;
+};
