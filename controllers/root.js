@@ -62,8 +62,12 @@ var Root = (function() {
 
                     }, tokens_cache);
                 } else if (config.rbac){
-                    if (RBAC.check_permissions(auth_token, user_info, req))
+                    RBAC.check_permissions(auth_token, user_info, req, function () {
                         redir_request(req, res, user_info);
+                    }, function (status, e) {
+                            log.error('User access-token not authorized: ', e);
+                            res.status(401).send('User token not authorized');
+                    });
                 } else{
                     redir_request(req, res, user_info);
                 }
