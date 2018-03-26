@@ -65,8 +65,16 @@ var Root = (function() {
                     RBAC.check_permissions(auth_token, user_info, req, function () {
                         redir_request(req, res, user_info);
                     }, function (status, e) {
+                        if (status === 401) {
                             log.error('User access-token not authorized: ', e);
                             res.status(401).send('User token not authorized');
+                        } else if (status === 404) {
+                            log.error('Path not found: ', e);
+                            res.status(404).send(e);
+                        } else {
+                            log.error('Error in RBAC communication ', e);
+                            res.status(503).send('Error in RBAC communication');
+                        }
                     });
                 } else{
                     redir_request(req, res, user_info);
