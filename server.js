@@ -7,10 +7,11 @@ var config = require('./config'),
 
 config.azf = config.azf || {};
 config.https = config.https || {};
+config.rbac = config.rbac || {};
 
 var log = require('./lib/logger').logger.getLogger("Server");
 
-var express = require('express');
+var express = require('express'); 
 
 process.on('uncaughtException', function (err) {
   log.error('Caught exception: ' + err);
@@ -18,8 +19,6 @@ process.on('uncaughtException', function (err) {
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 var app = express();
-
-//app.use(express.bodyParser());
 
 app.use (function(req, res, next) {
     var bodyChunks = [];
