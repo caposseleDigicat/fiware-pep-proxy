@@ -71,9 +71,12 @@ var Root = (function() {
                         } else if (status === 404) {
                             log.error('Path not found: ', e);
                             res.status(404).send(e);
+                        } else if (status === 411) {
+                            log.error('Error JSON: ', e);
+                            res.status(411).send(e);
                         } else {
-                            log.error('Error in RBAC communication ', e);
-                            res.status(503).send('Error in RBAC communication');
+                            log.error('Error in RBAC', e);
+                            res.status(500).send(e);
                         }
                     });
                 } else{
