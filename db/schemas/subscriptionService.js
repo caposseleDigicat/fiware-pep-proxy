@@ -24,7 +24,7 @@ var subscriptionServiceSchema = new Schema({
     subscriptionId: {type: String, required: true},
     user: { type: String, required: true },
     authToken: { type: String, required: true },
-    timestamp: { type: Date, default: () => Date.now() }
+    timestamp: { type: Date, default: Date.now() }
 });
 
 subscriptionServiceSchema.index({subscriptionId: 1, user: 1}, {unique: true});
