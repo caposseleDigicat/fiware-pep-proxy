@@ -54,4 +54,13 @@ config.tokens_engine = 'oauth2';
 
 config.magic_key = undefined;
 
+// MongoDB
+config.mongoDb = {
+    server: 'localhost',
+    port: 27717,
+    user: '',
+    password: '',
+    db: 'pep'
+};
+
 module.exports = config;
