@@ -1,7 +1,6 @@
-/* Copyright (c) 2015 - 2016 CoNWeT Lab., Universidad Politécnica de Madrid
+/* Copyright (c) 2018 Digital Catapult
  *
- * This file belongs to the business-ecosystem-logic-proxy of the
- * Business API Ecosystem
+ * This file belongs to the pep-proxy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as

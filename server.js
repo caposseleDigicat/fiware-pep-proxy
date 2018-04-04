@@ -3,7 +3,9 @@ var config = require('./config'),
     https = require('https'),
     Root = require('./controllers/root').Root,
     IDM = require("./lib/idm.js").IDM,
-    errorhandler = require('errorhandler');
+    errorhandler = require('errorhandler'),
+    mongoose = require('mongoose'),
+    uuid = require('node-uuid');
 
 config.azf = config.azf || {};
 config.https = config.https || {};
@@ -67,6 +69,41 @@ if (config.tokens_engine === 'keystone' && config.azf.enabled === true) {
     log.error('Keystone token engine is not compatible with AuthZForce. Please review configuration file.');
     return;
 }
+
+/////////////////////////////////////////////////////////////////////
+////////////////////////// MONGOOSE CONFIG //////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+config.mongoDb = config.mongoDb || {};
+config.mongoDb.user = config.mongoDb.user || '';
+config.mongoDb.password = config.mongoDb.password || '';
+config.mongoDb.server = config.mongoDb.server || 'localhost';
+config.mongoDb.port = config.mongoDb.port || 27717;
+config.mongoDb.db = config.mongoDb.db || 'pep';
+
+var mongoCredentials = '';
+
+if (config.mongoDb.user && config.mongoDb.password) {
+    mongoCredentials = config.mongoDb.user + ':' + config.mongoDb.password + '@';
+}
+
+var mongoUrl = 'mongodb://' + mongoCredentials + config.mongoDb.server + ':' +
+    config.mongoDb.port + '/' + config.mongoDb.db;
+
+mongoose.connect(mongoUrl, function(err) {
+    if (err) {
+        log.error('Cannot connect to MongoDB - ' + err.name + ' (' + err.code + '): ' + err.message);
+    }
+});
+
+mongoose.connection.on('disconnected', function() {
+    logger.error('Connection with MongoDB lost');
+});
+
+mongoose.connection.on('reconnected', function() {
+    logger.info('Connection with MongoDB reopened');
+});
+
 
 log.info('Starting PEP proxy in port ' + port + '. Keystone authentication ...');
 
