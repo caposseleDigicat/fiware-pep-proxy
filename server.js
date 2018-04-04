@@ -97,11 +97,11 @@ mongoose.connect(mongoUrl, function(err) {
 });
 
 mongoose.connection.on('disconnected', function() {
-    logger.error('Connection with MongoDB lost');
+    log.error('Connection with MongoDB lost');
 });
 
 mongoose.connection.on('reconnected', function() {
-    logger.info('Connection with MongoDB reopened');
+    log.info('Connection with MongoDB reopened');
 });
 
 
