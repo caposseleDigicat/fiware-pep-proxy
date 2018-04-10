@@ -56,7 +56,7 @@ config.magic_key = undefined;
 
 // MongoDB
 config.mongoDb = {
-    server: 'mongo_pep.docker',
+    server: 'mongoPep',
     port: 27717,
     user: '',
     password: '',

@@ -78,7 +78,7 @@ config.mongoDb = config.mongoDb || {};
 config.mongoDb.user = config.mongoDb.user || '';
 config.mongoDb.password = config.mongoDb.password || '';
 config.mongoDb.server = config.mongoDb.server || 'localhost';
-config.mongoDb.port = config.mongoDb.port || 27717;
+config.mongoDb.port = config.mongoDb.port || 27017;
 config.mongoDb.db = config.mongoDb.db || 'pep';
 
 var mongoCredentials = '';
