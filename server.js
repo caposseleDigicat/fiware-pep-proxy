@@ -9,7 +9,7 @@ var config = require('./config'),
 
 config.azf = config.azf || {};
 config.https = config.https || {};
-config.rbac = config.rbac || {};
+config.rbac = config.rbac || false;
 
 var log = require('./lib/logger').logger.getLogger("Server");
 
