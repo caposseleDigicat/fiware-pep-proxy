@@ -6,6 +6,9 @@ var config = require('./../config.js'),
 
 var log = require('./../lib/logger').logger.getLogger("Root");
 
+var logService = require('../db/schemas/logService');
+var logger = new logService();
+
 var Root = (function() {
 
     //{token: {user_info: {}, date: Date, verb1: [res1, res2, ..], verb2: [res3, res4, ...]}}
@@ -39,9 +42,17 @@ var Root = (function() {
                 return;
 
             }
+            logger = new logService();
+            logger.ip = req.connection.remoteAddress;
+            logger.url = req.url;
+            logger.method = req.method;
+            logger.requestHeaders = JSON.stringify(req.headers);
+            if (req.body !== undefined)
+                if(req.body.length > 0)
+                    logger.requestBody = JSON.stringify(JSON.parse(req.body));
+            logger.requestTimestamp = Date.now();
 
     		IDM.check_token(auth_token, function (user_info) {
-
                 if (config.azf.enabled) {
                     
                     AZF.check_permissions(auth_token, user_info, req, function () {
@@ -64,9 +75,21 @@ var Root = (function() {
                 } else if (config.rbac){
                     //LOG request
                     //TODO
+                    
                     RBAC.check_permissions(auth_token, user_info, req, function () {
                         redir_request(req, res, user_info);
                     }, function (status, e) {
+                        logger.responseStatus = status;
+                        logger.responseBody = e;
+                        logger.responseTimestamp = Date.now();
+                        logger.save(function (err) {
+                            if (err) {
+                                log.error('New LOG Failed:', err);
+                            } 
+                            else {
+                                log.error('New LOG OK');
+                            }
+                        });
                         if (status === 401) {
                             log.error('User access-token not authorized: ', e);
                             res.status(401).send('User token not authorized');
@@ -87,6 +110,17 @@ var Root = (function() {
 
 
     		}, function (status, e) {
+                logger.responseStatus = status;
+                logger.responseBody = e;
+                logger.responseTimestamp = Date.now();
+                logger.save(function (err) {
+                    if (err) {
+                        log.error('New LOG Failed:', err);
+                    } 
+                    else {
+                        log.error('New LOG OK');
+                    }
+                });
     			if (status === 404 || status === 401) {
                     log.error('User access-token not authorized');
                     res.status(401).send('User access-token not authorized. Token invalid or expired');
