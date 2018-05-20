@@ -1,0 +1,30 @@
+version: '3'
+services:
+    mongo:
+        image: mongo:3.2
+        restart: always
+        ports:
+            - 27117:27017
+        networks:
+            main:
+        volumes:
+            - ./mongo-data:/data/db
+    pep:
+        #image: angelocapossele/pep-proxy:latest
+        image: angelocapossele/pep-proxy-accounting:latest
+        restart: always
+        links:
+            - mongo
+        volumes:
+            - ./config.js:/opt/fiware-pep-proxy/config.js
+            #- ./lib:/opt/fiware-pep-proxy/lib
+        ports:
+            - 7000:7000
+        networks:
+            main:
+                aliases:
+                    - pep.docker
+
+networks:
+    main:
+        external: true
