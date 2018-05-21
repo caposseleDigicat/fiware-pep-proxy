@@ -1,6 +1,6 @@
 version: '3'
 services:
-    mongo:
+    mongoPep:
         image: mongo:3.2
         restart: always
         ports:
@@ -14,7 +14,7 @@ services:
         image: angelocapossele/pep-proxy-accounting:latest
         restart: always
         links:
-            - mongo
+            - mongoPep
         volumes:
             - ./config.js:/opt/fiware-pep-proxy/config.js
             #- ./lib:/opt/fiware-pep-proxy/lib

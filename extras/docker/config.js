@@ -57,7 +57,7 @@ config.magic_key = '123456789';
 
 // MongoDB
 config.mongoDb = {
-    server: 'mongo',
+    server: 'mongoPep',
     port: 27017,
     user: '',
     password: '',
