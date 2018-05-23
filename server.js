@@ -66,14 +66,11 @@ for (var p in config.public_paths) {
 
 app.all('/*', Root.pep);
 
-if (config.tokens_engine === 'keystone' && config.azf.enabled === true) {
-    log.error('Keystone token engine is not compatible with AuthZForce. Please review configuration file.');
-    return;
-}
 
 /////////////////////////////////////////////////////////////////////
 ////////////////////////// MONGOOSE CONFIG //////////////////////////
 /////////////////////////////////////////////////////////////////////
+if(config.rbac || config.logging){
 
 config.mongoDb = config.mongoDb || {};
 config.mongoDb.user = config.mongoDb.user || '';
@@ -85,35 +82,35 @@ config.mongoDb.db = config.mongoDb.db || 'pep';
 var mongoCredentials = '';
 
 if (config.mongoDb.user && config.mongoDb.password) {
-    mongoCredentials = config.mongoDb.user + ':' + config.mongoDb.password + '@';
-}
-
-var mongoUrl = 'mongodb://' + mongoCredentials + config.mongoDb.server + ':' +
-    config.mongoDb.port + '/' + config.mongoDb.db;
-
-mongoose.connect(mongoUrl, function(err) {
-    if (err) {
-        log.error('Cannot connect to MongoDB - ' + err.name + ' (' + err.code + '): ' + err.message);
+        mongoCredentials = config.mongoDb.user + ':' + config.mongoDb.password + '@';
     }
-});
 
-mongoose.connection.on('disconnected', function() {
-    log.error('Connection with MongoDB lost');
-});
+    var mongoUrl = 'mongodb://' + mongoCredentials + config.mongoDb.server + ':' +
+        config.mongoDb.port + '/' + config.mongoDb.db;
 
-mongoose.connection.on('reconnected', function() {
-    log.info('Connection with MongoDB reopened');
-});
+    mongoose.connect(mongoUrl, function(err) {
+        if (err) {
+            log.error('Cannot connect to MongoDB - ' + err.name + ' (' + err.code + '): ' + err.message);
+        }
+    });
 
+    mongoose.connection.on('disconnected', function() {
+        log.error('Connection with MongoDB lost');
+    });
 
-log.info('Starting PEP proxy in port ' + port + '. Keystone authentication ...');
+    mongoose.connection.on('reconnected', function() {
+        log.info('Connection with MongoDB reopened');
+    });
+
+}
+log.info('Starting PEP proxy in port ' + port + '. Keyrock authentication ...');
 
 IDM.authenticate (function (token) {
 
     log.info('Success authenticating PEP proxy. Proxy Auth-token: ', token);
 
 }, function (status, e) {
-    log.error('Error in keystone communication', e);
+    log.error('Error in Keyrock communication', e);
 });
 
 if (config.https.enabled === true) {
