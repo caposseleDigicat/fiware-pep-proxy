@@ -11,19 +11,24 @@ config.https = {
     port: 443
 };
 
-config.account_host = '';
-
-config.keystone_host = '';
-config.keystone_port = 5000;
+config.idm = {
+	host: '',
+	port: '',
+	ssl: false
+}
 
 config.app_host = '';
 config.app_port = '';
 // Use true if the app server listens in https
 config.app_ssl = false;
 
-// Credentials obtained when registering PEP Proxy in Account Portal
-config.username = '';
-config.password = '';
+// Credentials obtained when registering PEP Proxy in app_id in Account Portal
+config.pep = {
+	app_id: '',
+	username: '',
+	password: '',
+	trusted_apps : []
+}
 
 // in seconds
 config.cache_time = 300;
