@@ -35,8 +35,10 @@ config.cache_time = 300;
 
 
 // if enabled PEP checks permissions with RBAC. 
-// only compatible with oauth2 tokens engine
 config.rbac = true;
+
+//if enabled PEP logs access requests and responses on mongoDb
+config.logging = true;
 
 // if enabled PEP checks permissions with AuthZForce GE. 
 // only compatible with oauth2 tokens engine
@@ -54,9 +56,6 @@ config.azf = {
 // list of paths that will not check authentication/authorization
 // example: ['/public/*', '/static/css/']
 config.public_paths = [];
-
-// options: oauth2/keystone
-config.tokens_engine = 'oauth2';
 
 config.magic_key = '123456789';
 

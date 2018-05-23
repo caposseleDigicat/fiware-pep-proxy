@@ -34,8 +34,10 @@ config.pep = {
 config.cache_time = 300;
 
 // if enabled PEP checks permissions with RBAC. 
-// only compatible with oauth2 tokens engine
 config.rbac = true;
+
+//if enabled PEP logs access requests and responses on mongoDb
+config.logging = true;
 
 // if enabled PEP checks permissions with AuthZForce GE. 
 // only compatible with oauth2 tokens engine

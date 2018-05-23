@@ -25,7 +25,7 @@ var Root = (function() {
 
     	if (auth_token === undefined) {
             log.error('Auth-token not found in request header');
-            var auth_header = 'IDM uri = ' + config.account_host;
+            var auth_header = 'IDM uri = ' + config.idm_host;
             res.set('WWW-Authenticate', auth_header);
             res.status(401).send('Auth-token not found in request header');
     	} else {
@@ -38,19 +38,22 @@ var Root = (function() {
                     method: req.method,
                     headers: proxy.getClientIp(req, req.headers)
                 };
-                proxy.sendData('http', options, req.body, res);
+                var protocol = config.app_ssl ? 'https' : 'http';
+                proxy.sendData(protocol, options, req.body, res);
                 return;
 
             }
-            logger = new logService();
-            logger.ip = req.connection.remoteAddress;
-            logger.url = req.url;
-            logger.method = req.method;
-            logger.requestHeaders = JSON.stringify(req.headers);
-            if (req.body !== undefined)
-                if(req.body.length > 0)
-                    logger.requestBody = JSON.stringify(JSON.parse(req.body));
-            logger.requestTimestamp = Date.now();
+            if(config.logging) {
+                logger = new logService();
+                logger.ip = req.connection.remoteAddress;
+                logger.url = req.url;
+                logger.method = req.method;
+                logger.requestHeaders = JSON.stringify(req.headers);
+                if (req.body !== undefined)
+                    if(req.body.length > 0)
+                        logger.requestBody = JSON.stringify(JSON.parse(req.body));
+                logger.requestTimestamp = Date.now();
+            }
 
     		IDM.check_token(auth_token, function (user_info) {
                 if (config.azf.enabled) {
@@ -79,17 +82,19 @@ var Root = (function() {
                     RBAC.check_permissions(auth_token, user_info, req, function () {
                         redir_request(req, res, user_info);
                     }, function (status, e) {
-                        logger.responseStatus = status;
-                        logger.responseBody = e;
-                        logger.responseTimestamp = Date.now();
-                        logger.save(function (err) {
-                            if (err) {
-                                log.error('New LOG Failed:', err);
-                            } 
-                            else {
-                                log.error('New LOG OK');
-                            }
-                        });
+                        if(config.logging) {
+                            logger.responseStatus = status;
+                            logger.responseBody = e;
+                            logger.responseTimestamp = Date.now();
+                            logger.save(function (err) {
+                                if (err) {
+                                    log.error('New LOG Failed:', err);
+                                } 
+                                else {
+                                    log.error('New LOG OK');
+                                }
+                            });
+                        }
                         if (status === 401) {
                             log.error('User access-token not authorized: ', e);
                             res.status(401).send('User token not authorized');
@@ -110,17 +115,19 @@ var Root = (function() {
 
 
     		}, function (status, e) {
-                logger.responseStatus = status;
-                logger.responseBody = e;
-                logger.responseTimestamp = Date.now();
-                logger.save(function (err) {
-                    if (err) {
-                        log.error('New LOG Failed:', err);
-                    } 
-                    else {
-                        log.error('New LOG OK');
-                    }
-                });
+                if(config.logging) {
+                    logger.responseStatus = status;
+                    logger.responseBody = e;
+                    logger.responseTimestamp = Date.now();
+                    logger.save(function (err) {
+                        if (err) {
+                            log.error('New LOG Failed:', err);
+                        } 
+                        else {
+                            log.error('New LOG OK');
+                        }
+                    });
+                }
     			if (status === 404 || status === 401) {
                     log.error('User access-token not authorized');
                     res.status(401).send('User access-token not authorized. Token invalid or expired');
@@ -141,18 +148,12 @@ var Root = (function() {
         if (user_info) {
 
             log.info('Access-token OK. Redirecting to app...');
+            
+            req.headers['X-Nick-Name'] = user_info.id;
+            req.headers['X-Display-Name'] = user_info.displayName;
+            req.headers['X-Roles'] = JSON.stringify(user_info.roles);
+            req.headers['X-Organizations'] = JSON.stringify(user_info.organizations);
 
-            if (config.tokens_engine === 'keystone') {
-                req.headers['X-Nick-Name'] = user_info.token.user.id;
-                req.headers['X-Display-Name'] = user_info.token.user.id;
-                req.headers['X-Roles'] = user_info.token.roles;
-                req.headers['X-Organizations'] = user_info.token.project;
-            } else {
-                req.headers['X-Nick-Name'] = user_info.id;
-                req.headers['X-Display-Name'] = user_info.displayName;
-                req.headers['X-Roles'] = JSON.stringify(user_info.roles);
-                req.headers['X-Organizations'] = JSON.stringify(user_info.organizations);
-            }
         } else {
             log.info('Public path. Redirecting to app...');
         }
