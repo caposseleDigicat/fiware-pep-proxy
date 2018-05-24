@@ -4,8 +4,8 @@ WORKDIR /opt
 
 # Install Ubuntu dependencies
 RUN sudo apt-get update && \
-	sudo apt-get install curl git build-essential -y
-	#sudo apt-get install make g++ software-properties-common python-software-properties -y
+	sudo apt-get install curl git build-essential -y && \
+	sudo apt-get install make g++ software-properties-common python-software-properties -y
 
 # Install PPA
 RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
