@@ -26,6 +26,7 @@ RUN ls
 RUN git clone https://github.com/caposseleDigicat/fiware-pep-proxy.git && \
 	cd fiware-pep-proxy && \
 	git checkout testing && \
+	npm install -g node-gyp && \
 	npm install
 
 # Run PEP Proxy
