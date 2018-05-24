@@ -10,38 +10,40 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 describe('Sanity Checks for Wilma PEP Proxy - Identity Manager Checks', function() {
 
-    describe('Testing Keystone configuration', function() {
+    describe('Testing Keyrock configuration', function() {
 
-		it('should have Keystone configured', function (done) {
-			if (config.keystone_host !== undefined && config.keystone_host !== '') {
-				if (config.keystone_port !== undefined && config.keystone_port !== '') {
-					done();
+		it('should have Keyrock configured', function (done) {
+			if (config.idm.version !== undefined && config.idm.version !== '') {
+				if (config.idm.host !== undefined && config.idm.host !== '') {
+					if (config.idm.port !== undefined && config.idm.port !== '') {
+						done();
+					}
 				}
 			}
 		});
 
 		it('should have PEP user configured', function (done) {
-			if (config.username !== undefined && config.username !== '') {
-				if (config.password !== undefined && config.password !== '') {
+			if (config.pep.username !== undefined && config.pep.username !== '') {
+				if (config.pep.password !== undefined && config.pep.password !== '') {
 					done();
 				}
 			}
 		});
 	});
 
-    describe('Testing connection with Keystone', function() {
+    describe('Testing connection with Keyrock', function() {
 
-    	it('should have connectivity with Keystone', function (done) {
+    	it('should have connectivity with Keyrock', function (done) {
 			IDM.check_conn (function (status) {
 				if (status === 200) {
 			    	done();	
 				};
 			}, function (status, e) {
-			    log.error('Error in keystone communication', e);
+			    log.error('Error in Keyrock communication', e);
 			});
 		});
 
-		it('should authenticate with Keystone', function (done) {
+		it('should authenticate with Keyrock', function (done) {
 			IDM.authenticate (function (token) {
 			    done();
 			}, function (status, e) {
