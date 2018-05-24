@@ -4,23 +4,23 @@ WORKDIR /opt
 
 # Install Ubuntu dependencies
 RUN sudo apt-get update && \
-	sudo apt-get install make g++ software-properties-common python-software-properties -y && \
+	sudo apt-get install make g++ software-properties-common python-software-properties git -y && \
 	#sudo add-apt-repository ppa:chris-lea/node.js -y && \
 	#sudo apt-get update && \
-	sudo apt-get install nodejs npm git -y
+	#sudo apt-get install nodejs npm git -y
 
 # # Install PPA
-# RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 
 # # Install nodejs
-# RUN sudo apt-get update && \
-# 	sudo apt-get install nodejs -y
+RUN sudo apt-get update && \
+ 	sudo apt-get install nodejs -y
 
 # Update npm
 RUN sudo npm cache clean -f && \
 	sudo npm install -g n && \
 	sudo n stable && \
-	sudo npm i npm@latest -g
+	#sudo npm i npm@latest -g
 
 # RUN ls
 
