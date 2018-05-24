@@ -7,7 +7,7 @@
     "express": "4.x",
     "xml2json": "0.11.2",
     "xml2js": "0.4.19",
-    "log4js": "2.7.0",
+    "log4js": "0.6.x",
     "escape-html": "1.0.3",
     "xmlhttprequest": "1.8.0",
     "errorhandler": "1.x",
