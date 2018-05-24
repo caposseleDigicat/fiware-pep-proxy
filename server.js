@@ -11,6 +11,7 @@ config.azf = config.azf || {};
 config.https = config.https || {};
 config.rbac = config.rbac || false;
 config.logging = config.logging || false;
+config.idm.version = config.idm.version || 'keyrock:5.4';
 
 var log = require('./lib/logger').logger.getLogger("Server");
 
