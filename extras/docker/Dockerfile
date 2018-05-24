@@ -7,7 +7,7 @@ RUN sudo apt-get update && \
 	sudo apt-get install make g++ software-properties-common python-software-properties -y && \
 	#sudo add-apt-repository ppa:chris-lea/node.js -y && \
 	#sudo apt-get update && \
-	sudo apt-get install nodejs git -y
+	sudo apt-get install nodejs npm git -y
 
 # # Install PPA
 # RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
