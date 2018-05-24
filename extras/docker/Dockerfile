@@ -1,10 +1,10 @@
-FROM ubuntu:16.04
+FROM ubuntu:17.10
 
 WORKDIR /opt
 
 # Install Ubuntu dependencies
-RUN sudo apt-get update && \
-	sudo apt-get install curl git build-essential -y
+RUN apt-get update && \
+	apt-get install sudo curl git build-essential -y
 	#sudo apt-get install make g++ software-properties-common python-software-properties -y
 
 # Install PPA
