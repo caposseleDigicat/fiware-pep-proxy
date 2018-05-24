@@ -16,11 +16,11 @@ RUN sudo apt-get update && \
 # RUN sudo apt-get update && \
 # 	sudo apt-get install nodejs -y
 
-# # Update npm
-# RUN sudo npm cache clean -f && \
-# 	sudo npm install -g n && \
-# 	sudo n stable && \
-# 	sudo npm i npm@latest -g
+# Update npm
+RUN sudo npm cache clean -f && \
+	sudo npm install -g n && \
+	sudo n stable && \
+	sudo npm i npm@latest -g
 
 # RUN ls
 
