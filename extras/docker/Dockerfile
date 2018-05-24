@@ -17,7 +17,8 @@ RUN sudo apt-get update && \
 # Update npm
 RUN sudo npm cache clean -f && \
 	sudo npm install -g n && \
-	sudo n stable
+	sudo n stable && \
+	sudo npm i npm@latest -g
 
 # Download latest version of the code and install npm dependencies
 RUN git clone https://github.com/caposseleDigicat/fiware-pep-proxy.git && \

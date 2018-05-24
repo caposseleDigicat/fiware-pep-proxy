@@ -14,7 +14,7 @@
     "should":"~4.0.4",
     "mocha":"~1.20.1",
     "mongoose": "^5.0.14",
-    "node-uuid": "^1.4.7"
+    "uuid": "^3.2.1"
   },
   "repository": {
     "type": "git",
