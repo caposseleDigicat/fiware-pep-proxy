@@ -10,14 +10,12 @@ services:
         volumes:
             - ./mongo-data:/data/db
     pep:
-        #image: angelocapossele/pep-proxy:latest
-        image: angelocapossele/pep-proxy-accounting:latest
+        image: angelocapossele/pep-proxy-plus:latest
         restart: always
         links:
             - mongoPep
         volumes:
             - ./config.js:/opt/fiware-pep-proxy/config.js
-            #- ./lib:/opt/fiware-pep-proxy/lib
         ports:
             - 7000:7000
         networks:
