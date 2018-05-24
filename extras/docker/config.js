@@ -12,6 +12,7 @@ config.https = {
 };
 
 config.idm = {
+    version: '',
 	host: '',
 	port: '',
 	ssl: false

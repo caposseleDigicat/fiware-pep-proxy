@@ -76,9 +76,6 @@ var Root = (function() {
 
                     }, tokens_cache);
                 } else if (config.rbac){
-                    //LOG request
-                    //TODO
-                    
                     RBAC.check_permissions(auth_token, user_info, req, function () {
                         redir_request(req, res, user_info);
                     }, function (status, e) {

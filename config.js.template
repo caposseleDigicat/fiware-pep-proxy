@@ -12,6 +12,7 @@ config.https = {
 };
 
 config.idm = {
+    version: 'keyrock:5',
 	host: 'account.lab.fiware.org',
 	port: 443,
 	ssl: true
