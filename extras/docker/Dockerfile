@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:17.10
 
 WORKDIR /opt
 
