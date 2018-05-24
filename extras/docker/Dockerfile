@@ -1,17 +1,17 @@
-FROM ubuntu:14.04
+FROM ubuntu:18.04
 
 WORKDIR /opt
 
 # Install Ubuntu dependencies
-RUN sudo apt-get update && \
-	sudo apt-get install make g++ software-properties-common python-software-properties curl git -y
+RUN apt-get update && \
+	apt-get install sudo make g++ curl git gnupg -y
 
 # # Install PPA
 RUN curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 
 # # Install nodejs
-RUN sudo apt-get update && \
- 	sudo apt-get install nodejs -y
+RUN apt-get update && \
+ 	apt-get install nodejs -y
 
 # Update npm
 #RUN	sudo npm i npm@latest -g
