@@ -24,7 +24,7 @@ var Root = (function() {
         }
 
     	if (auth_token === undefined) {
-            log.error('Auth-token not found in request header');
+            log.info('Auth-token not found in request header');
             var auth_header = 'IDM uri = ' + config.idm_host;
             res.set('WWW-Authenticate', auth_header);
             res.status(401).send('Auth-token not found in request header');
@@ -64,10 +64,10 @@ var Root = (function() {
 
                     }, function (status, e) {
                         if (status === 401) {
-                            log.error('User access-token not authorized: ', e);
+                            log.info('User access-token not authorized: ', e);
                             res.status(401).send('User token not authorized');
                         } else if (status === 404) {
-                            log.error('Domain not found: ', e);
+                            log.info('Domain not found: ', e);
                             res.status(404).send(e);
                         } else {
                             log.error('Error in AZF communication ', e);
@@ -88,18 +88,18 @@ var Root = (function() {
                                     log.error('New LOG Failed:', err);
                                 } 
                                 else {
-                                    log.error('New LOG OK');
+                                    log.debug('New LOG OK');
                                 }
                             });
                         }
                         if (status === 401) {
-                            log.error('User access-token not authorized: ', e);
+                            log.info('User access-token not authorized: ', e);
                             res.status(401).send('User token not authorized');
                         } else if (status === 404) {
-                            log.error('Path not found: ', e);
+                            log.info('Path not found: ', e);
                             res.status(404).send(e);
                         } else if (status === 411) {
-                            log.error('Error JSON: ', e);
+                            log.info('Error JSON: ', e);
                             res.status(411).send(e);
                         } else {
                             log.error('Error in RBAC', e);
@@ -121,12 +121,12 @@ var Root = (function() {
                             log.error('New LOG Failed:', err);
                         } 
                         else {
-                            log.error('New LOG OK');
+                            log.debug('New LOG OK');
                         }
                     });
                 }
     			if (status === 404 || status === 401) {
-                    log.error('User access-token not authorized');
+                    log.info('User access-token not authorized');
                     res.status(401).send('User access-token not authorized. Token invalid or expired');
                 } else {
                     log.error('Error in IDM communication ', e);
