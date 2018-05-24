@@ -5,7 +5,7 @@ var config = require('./config'),
     IDM = require("./lib/idm.js").IDM,
     errorhandler = require('errorhandler'),
     mongoose = require('mongoose'),
-    uuid = require('node-uuid');
+    uuid = require('uuid');
 
 config.azf = config.azf || {};
 config.https = config.https || {};
