@@ -12,7 +12,7 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 # Install nodejs
 RUN apt-get update && \
  	apt-get install nodejs -y
-RUN touch 3
+RUN touch 4
 # Download latest version of the code and install npm dependencies
 RUN git clone https://github.com/caposseleDigicat/fiware-pep-proxy.git && \
 	cd fiware-pep-proxy && \
