@@ -9,6 +9,10 @@
 + [API Overview](#def-api)
 + [Policies](#def-policies)
 + [Testing](#def-testing)
+	+ [Testing as admin](#def-testing-admin)
+		- [Keyrock prior version 7](#def-testing-prior-7)
+		- [Keyrock from version 7](#def-testing-from-7)
+	- [Testing as consumer](#def-testing-consumer)
 + [License](#def-license)
 
 ---
@@ -196,7 +200,11 @@ After this, you will also need to run the following command on the IdM `MySQL` i
 <a name="def-testing"></a>
 ## Testing
 
-**Testing as administrator**
+<a name="def-testing-admin"></a>
+### Testing as administrator
+
+<a name="def-testing-from-7"></a>
+#### Keyrock from version 7
 
 To create new role on the Keyrock instance you have two options:
 
@@ -254,6 +262,7 @@ As result, the response body should look like:
 ```
 
 To create a user-role-application relationship you can:
+
 **POST** `http://<IDM HOST>:<IDM PORT>v1/applications/<CLIENT_ID>/users/<USER_ID>/roles/<ROLE_ID>` with header: `X-Auth-Token: <X-Subject-Token>` and `Content-Type: application/json`
 
 As result, the response body should look like:
@@ -268,8 +277,82 @@ As result, the response body should look like:
 }
 ```
 
+<a name="def-testing-from-7"></a>
+#### Keyrock from version 7
 
-**Testing as a consumer**
+To create new role on the Keyrock instance you have two options:
+
+* Use the web interface of the IdM
+* Use the API
+
+To create roles through the API you first need to obtain an OAuth2 token:
+
+**POST** `http://<IDM HOST>:<IDM PORT>/v3/auth/tokens` with header: `Content-Type: application/json`
+
+with the following body:
+```
+{
+	"name" : "admin@test.com",
+	"password" : "1234"
+}
+```
+
+As result, the response header should look like:
+
+```
+X-Subject-Token	76b2ab6b-07c2-4969-bdc8-20a9ae38dfd7
+Content-Type	application/json; charset=utf-8
+Content-Length	74
+ETag	W/"4a-kOiTbucnqOQPYmzxq/mHY9RqRuU"
+Date	Thu, 24 May 2018 11:24:35 GMT
+Connection	keep-alive
+```
+
+The new OAuth2 token can be retrieved from the header field `X-Subject-Token`, in this case: `76b2ab6b-07c2-4969-bdc8-20a9ae38dfd7`
+
+Now you can use this token to create a new role (e.g., `|GET|AirQualityObserved||`) in the context of your application (e.g., Orion Context Broker) by specifing its `CLIENT_ID`:
+
+**POST** `http://<IDM HOST>:<IDM PORT>/v1/applications/<CLIENT_ID>/roles/` with header: `X-Auth-Token: <X-Subject-Token>` and `Content-Type: application/json`
+
+with the following body:
+```
+{
+  "role": {
+    "name": "|GET|AirQualityObserved||"
+  }
+}
+```
+
+As result, the response body should look like:
+```
+{
+	"role": {
+		"id": "14e1cab1-4ad8-42f7-b7da-b7517c2c3024",
+		"is_internal": false,
+		"name": "|GET|AirQualityObserved||",
+		"oauth_client_id": "3fc437d0-004c-4d74-a11a-d0a4bbbe2f61"
+	}
+}
+```
+
+To create a user-role-application relationship you can:
+
+**POST** `http://<IDM HOST>:<IDM PORT>v1/applications/<CLIENT_ID>/users/<USER_ID>/roles/<ROLE_ID>` with header: `X-Auth-Token: <X-Subject-Token>` and `Content-Type: application/json`
+
+As result, the response body should look like:
+
+```
+{
+  "role_user_assignments": {
+    "role_id": "14e1cab1-4ad8-42f7-b7da-b7517c2c3024",
+    "user_id": "2d6f5391-6130-48d8-a9d0-01f20699a7eb",
+    "oauth_client_id": "3fc437d0-004c-4d74-a11a-d0a4bbbe2f61"
+  }
+}
+```
+
+<a name="def-testing-consumer"></a>
+### Testing as a consumer
 
 To obtain an OAuth2 token as a consumer, you can perform: 
 
