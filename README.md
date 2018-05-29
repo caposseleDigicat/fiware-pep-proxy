@@ -196,7 +196,8 @@ After this, you will also need to run the following command on the IdM `MySQL` i
 <a name="def-testing"></a>
 ## Testing
 
-##Testing as administrator
+**Testing as administrator**
+
 To create new role on the Keyrock instance you have two options:
 
 * Use the web interface of the IdM
@@ -266,7 +267,10 @@ As result, the response body should look like:
   }
 }
 ```
-##Testing as a consumer
+
+
+**Testing as a consumer**
+
 To obtain an OAuth2 token as a consumer, you can perform: 
 
 **POST** `http://<IDM HOST>:<IDM PORT>oauth2/token` with header: `Content-Type: application/x-www-form-urlencoded` and `Authorization: Basic <BASE64_encoded(CLIENT_ID:CLIENT_SECRET)>` (e.g. M2ZjNDM3ZDAtMDA0Yy00ZDc0LWExMWEtZDBhNGJiYmUyZjYxOmI5ZjhjYTkzLTRjODAtNDU1ZC1iMzgzLWVjNzg1ZTliNjJiOA==) and the Form URL encoded such as:
