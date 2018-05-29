@@ -259,8 +259,8 @@ with the following body:
 ```
 {
   "role": {
-    "name": "|GET|AirQualityObserved||",
-	"application_id": "<CLIENT_ID>"
+    	"name": "|GET|AirQualityObserved||",
+		"application_id": "<CLIENT_ID>"
   }
 }
 ```
