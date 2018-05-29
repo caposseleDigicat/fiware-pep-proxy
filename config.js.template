@@ -34,11 +34,15 @@ config.pep = {
 // in seconds
 config.cache_time = 300;
 
-// if enabled PEP checks permissions with RBAC. 
-config.rbac = true;
+// if enabled PEP checks permissions of NGSIv2 request with a Role Based Access Control
+// roles have to be provided according to the following scheme:
+// fiware-service|operation|entityType|entityID|attribute
+// e.g., tenantRZ1|GET|AirQualityObserved||
+// the above example will grant GET permission for each entity of type AirQualityObserved under the Fiware-Service tenantRZ1 
+config.rbac = false;
 
 //if enabled PEP logs access requests and responses on mongoDb
-config.logging = true;
+config.logging = false;
 
 // if enabled PEP checks permissions with AuthZForce GE. 
 // only compatible with oauth2 tokens engine

@@ -1,4 +1,4 @@
-#PEP Proxy - Wilma
+#PEP Proxy - Wilma Plus
 
 [![License badge](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Documentation badge](https://img.shields.io/badge/docs-stable-brightgreen.svg?style=flat)](http://fiware-pep-proxy.readthedocs.org/en/stable/)
@@ -23,51 +23,18 @@
 This project is part of [FIWARE](http://fiware.org). You will find more information about this FIWARE GE [here](http://catalogue.fiware.org/enablers/pep-proxy-wilma).
 
 - You will find the source code of this project in GitHub [here](https://github.com/ging/fiware-pep-proxy)
-- You will find the documentation of this project in Read the Docs [here](http://fiware-pep-proxy.readthedocs.org/)
 
-Thanks to this component and together with Identity Management and Authorization PDP GEs, you will add authentication and authorization security to your backend applications. Thus, only FIWARE users will be able to access your GEs or REST services. But you will be able also to manage specific permissions and policies to your resources allowing different access levels to your users.
+Thanks to this component and together with Identity Management and, optionally, with Authorization PDP GEs, you will add authentication and authorization security to your backend applications. Thus, only FIWARE users will be able to access your GEs or REST services. But you will be able also to manage specific permissions and policies to your resources allowing different access levels to your users.
 
 <a name="def-build"></a>
 ## How to Build & Install
 
-- Software requirements:
-
-	+ nodejs 
-	+ npm
-	Note: Both can be installed from (http://nodejs.org/download/)
-
-- Clone Proxy repository:
-
-<pre>
-git clone https://github.com/ging/fiware-pep-proxy.git
-</pre>
-
-- Install the dependencies:
-
-<pre>
-cd fiware-pep-proxy/
-npm install
-</pre>
-
-- Duplicate config.template in config.js and configure app host there. 
-
-<pre>
-config.app_host = 'www.google.es'; // Hostname to forward authenticated requests
-config.app_port = '80';            // Port where the HTTP server is running
-</pre>
-
-- Start proxy server
-
-<pre>
-sudo node server
-</pre>
-
 <a name="def-docker"></a>
 ### Docker
 
-We also provide a Docker image to facilitate you the building of this GE.
+We provide a Docker image to facilitate you the building of this GE.
 
-- [Here](https://github.com/ging/fiware-pep-proxy/tree/master/extras/docker) you will find the Dockerfile and the documentation explaining how to use it.
+- [Here](https://github.com/ging/fiware-pep-proxy/tree/master/extras/docker) you will find the Dockerfile and Docker-compose explaining how to use it.
 - In [Docker Hub](https://hub.docker.com/r/fiware/pep-proxy/) you will find the public image.
 
 <a name="def-api"></a>
@@ -98,6 +65,24 @@ X-Display-Name: display name of user in IdM
 X-Roles: roles of the user in IdM
 X-Organizations: organizations in IdM
 </pre>
+
+<a name="def-policies"></a>
+## Policies
+
+When enabling the RBAC feature, PEP checks permissions of NGSIv2 requests with a Role Based Access Control. Roles are structured as a set of attributes and have to
+be provided according to the following scheme:
+
+```
+fiware-service|operation|entityType|entityID|attribute
+```
+
+The following list provides some examples:
+
+* `|GET|AirQualityObserved||`: will grant `GET` permission for each entity of type `AirQualityObserved`
+* `tenantRZ1|GET|AirQualityObserved||`: will grant `GET` permission for each entity of type `AirQualityObserved` under the Fiware-Service `tenantRZ1`
+* `tenantRZ1|GET|AirQualityObserved|sensor_1|`: will grant `GET` permission for `sensor_1` entity of type `AirQualityObserved` under the Fiware-Service `tenantRZ1`
+* `tenantRZ1|GET|AirQualityObserved|sensor_1|temperature`: will grant `GET` permission for the attribute `temperature` of `sensor_1` entity of type `AirQualityObserved` under the Fiware-Service `tenantRZ1`
+
 
 <a name="def-advanced"></a>
 ## Advanced Documentation
