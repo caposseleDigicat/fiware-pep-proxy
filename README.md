@@ -1,4 +1,4 @@
-#PEP Proxy - Wilma Plus
+## PEP Proxy - Wilma Plus
 
 [![License badge](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Docker badge](https://img.shields.io/docker/pulls/fiware/pep-proxy.svg)](https://hub.docker.com/r/angelocapossele/pep-proxy-accounting/)
@@ -193,8 +193,8 @@ After this, you will also need to run the following command on the IdM `MySQL` i
 `ALTER TABLE role ALTER COLUMN name VARCHAR (500) NOT NULL; `
 
 
-#Testing
 <a name="def-testing"></a>
+## Testing
 
 ##Testing as administrator
 To create new role on the Keyrock instance you have two options:
