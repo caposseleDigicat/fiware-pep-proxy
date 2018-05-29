@@ -260,7 +260,7 @@ with the following body:
 {
   "role": {
     	"name": "|GET|AirQualityObserved||",
-		"application_id": "<CLIENT_ID>"
+	"application_id": "<CLIENT_ID>"
   }
 }
 ```
