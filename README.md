@@ -10,8 +10,8 @@
 + [Policies](#def-policies)
 + [Testing](#def-testing)
 	+ [Testing as admin](#def-testing-admin)
-		- [Keyrock prior version 7](#def-testing-prior-7)
-		- [Keyrock from version 7](#def-testing-from-7)
+		- [Keyrock version prior to 7](#def-testing-prior-7)
+		- [Keyrock version 7](#def-testing-from-7)
 	- [Testing as consumer](#def-testing-consumer)
 + [License](#def-license)
 
@@ -203,13 +203,15 @@ After this, you will also need to run the following command on the IdM `MySQL` i
 <a name="def-testing-admin"></a>
 ### Testing as administrator
 
-<a name="def-testing-from-7"></a>
-#### Keyrock from version 7
-
 To create new role on the Keyrock instance you have two options:
 
 * Use the web interface of the IdM
 * Use the API
+
+Based on which version of Keyrock you have deployed, you will need to perform different API calls.
+
+<a name="def-testing-from-7"></a>
+#### Keyrock version prior to 7
 
 To create roles through the API you first need to obtain an OAuth2 token:
 
@@ -218,33 +220,47 @@ To create roles through the API you first need to obtain an OAuth2 token:
 with the following body:
 ```
 {
-	"name" : "admin@test.com",
-	"password" : "1234"
+    "auth": {
+        "identity": {
+            "methods": [
+                "password"
+            ],
+            "password": {
+                "user": {
+                    "name": "idm",
+                    "domain": {
+                        "name": "Default"
+                    },
+                    "password": "idm"
+                }
+            }
+        }
+    }
 }
 ```
 
 As result, the response header should look like:
 
 ```
-X-Subject-Token	76b2ab6b-07c2-4969-bdc8-20a9ae38dfd7
-Content-Type	application/json; charset=utf-8
-Content-Length	74
-ETag	W/"4a-kOiTbucnqOQPYmzxq/mHY9RqRuU"
-Date	Thu, 24 May 2018 11:24:35 GMT
-Connection	keep-alive
+X-Subject-Token	c2702e222f404e87a3b1ee3a9f58f787
+Vary	X-Auth-Token
+Content-Type	application/json
+Content-Length	1054
+Date	Tue, 29 May 2018 14:16:16 GMT
 ```
 
-The new OAuth2 token can be retrieved from the header field `X-Subject-Token`, in this case: `76b2ab6b-07c2-4969-bdc8-20a9ae38dfd7`
+The new OAuth2 token can be retrieved from the header field `X-Subject-Token`, in this case: `c2702e222f404e87a3b1ee3a9f58f787`
 
-Now you can use this token to create a new role (e.g., `|GET|AirQualityObserved||`) in the context of your application (e.g., Orion Context Broker) by specifing its `CLIENT_ID`:
+Now you can use this token to create a new role (e.g., `|GET|AirQualityObserved||`) in the context of your application (e.g., Orion Context Broker) by specifing its `CLIENT_ID` inside the request body:
 
-**POST** `http://<IDM HOST>:<IDM PORT>/v1/applications/<CLIENT_ID>/roles/` with header: `X-Auth-Token: <X-Subject-Token>` and `Content-Type: application/json`
+**POST** `http://<IDM HOST>:<IDM PORT>/v3/OS-ROLES/roles`  with header: `X-Auth-Token: <X-Subject-Token>` and `Content-Type: application/json`
 
 with the following body:
 ```
 {
   "role": {
-    "name": "|GET|AirQualityObserved||"
+    "name": "|GET|AirQualityObserved||",
+	"application_id": "<CLIENT_ID>"
   }
 }
 ```
@@ -253,28 +269,29 @@ As result, the response body should look like:
 ```
 {
 	"role": {
-		"id": "14e1cab1-4ad8-42f7-b7da-b7517c2c3024",
 		"is_internal": false,
-		"name": "|GET|AirQualityObserved||",
-		"oauth_client_id": "3fc437d0-004c-4d74-a11a-d0a4bbbe2f61"
+		"application_id": "53626045d3bd4f8c84487f77944fa586",
+		"id": "49530c33ff854a9eb9aa0c86e2aa012c",
+		"links": {
+			"self": "http://<IDM HOST>:<IDM PORT>/v3/OS-ROLES/roles/49530c33ff854a9eb9aa0c86e2aa012c"
+		},
+		"name": "|GET|AirQualityObserved||"
 	}
 }
 ```
 
 To create a user-role-application relationship you can:
 
-**POST** `http://<IDM HOST>:<IDM PORT>v1/applications/<CLIENT_ID>/users/<USER_ID>/roles/<ROLE_ID>` with header: `X-Auth-Token: <X-Subject-Token>` and `Content-Type: application/json`
+**PUT** `http://35.229.108.169:5000/v3/OS-ROLES/users/<USER_ID>/applications/<CLIENT_ID>/roles/<ROLE_ID>` with header: `X-Auth-Token: <X-Subject-Token>`
 
-As result, the response body should look like:
+where `<USER_ID>` is the user ID of the user you wnat to grant the role (e.g., `alice`), `<CLIENT_ID>` is the OAuth2 client ID of your application registered in Keyrock (e.g., `53626045d3bd4f8c84487f77944fa586`) and `<ROLE_ID>` is the role ID you've just created (e.g., `49530c33ff854a9eb9aa0c86e2aa012c`).
+
+As result, the response should be `204 No Content` with header:
 
 ```
-{
-  "role_user_assignments": {
-    "role_id": "14e1cab1-4ad8-42f7-b7da-b7517c2c3024",
-    "user_id": "2d6f5391-6130-48d8-a9d0-01f20699a7eb",
-    "oauth_client_id": "3fc437d0-004c-4d74-a11a-d0a4bbbe2f61"
-  }
-}
+Vary	X-Auth-Token
+Content-Length	0
+Date	Tue, 29 May 2018 14:46:34 GMT
 ```
 
 <a name="def-testing-from-7"></a>
