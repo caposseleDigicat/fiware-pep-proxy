@@ -171,8 +171,18 @@ The following list provides some examples:
 Please note that this feature leverage on the `role name` field provided by the Keyrock IdM. By default, this field has a size of 64B, thus, if planning to set complex policies this size has to be changed.
 To change the size of the field `role name`, please modify this line in the `Keyrock` code:
 
-* `Keyrock version prior to 7`: in the file `./keystone/contrib/roles/backends/sql.py` change the line `name = sql.Column(sql.String(64), nullable=False)` to `name = sql.Column(sql.String(256), nullable=False)`. Once, modified, restart the Keyrock instance.  
-* `Keyrock version 7`:  in the file `/opt/fiware-idm/models/role.js` change the line `type: DataTypes.STRING(64) + ' CHARSET utf8mb4 COLLATE utf8mb4_unicode__ci',` to `type: DataTypes.STRING(256) + ' CHARSET utf8mb4 COLLATE utf8mb4_unicode__ci',`. After this, you will also need to run the following command on the IdM `MySQL` instance: `ALTER TABLE role ALTER COLUMN name VARCHAR (500) NOT NULL; `
+`Keyrock version prior to 7`: 
+In the file `./keystone/contrib/roles/backends/sql.py` change the line: 
+`name = sql.Column(sql.String(64), nullable=False)` to 
+`name = sql.Column(sql.String(256), nullable=False)`
+Once, modified, restart the Keyrock instance.  
+
+`Keyrock version 7`:  
+In the file `/opt/fiware-idm/models/role.js` change the line: 
+`type: DataTypes.STRING(64) + ' CHARSET utf8mb4 COLLATE utf8mb4_unicode__ci',` to 
+`type: DataTypes.STRING(256) + ' CHARSET utf8mb4 COLLATE utf8mb4_unicode__ci',`
+After this, you will also need to run the following command on the IdM `MySQL` instance: 
+`ALTER TABLE role ALTER COLUMN name VARCHAR (500) NOT NULL; `
 
 <a name="def-advanced"></a>
 ## Advanced Documentation
