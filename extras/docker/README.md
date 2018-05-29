@@ -1,6 +1,6 @@
 # How to use this Dockerfile
 
-To run a Wima PLus Docker container you have two options: 
+To run a Wima Plus Docker container you have two options: 
 
 - You can build your own image using the Dockerfile we provide and then run the container from it or
 - you can run the container directly from the image we provide in Docker Hub.
