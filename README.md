@@ -191,6 +191,50 @@ After this, you will also need to run the following command on the IdM `MySQL` i
 
 `ALTER TABLE role ALTER COLUMN name VARCHAR (500) NOT NULL; `
 
+To create new role on the Keyrock instance you have two options:
+
+* Use the web interface of the IdM
+* Use the API
+
+To create roles through the API you first need to obtain an OAuth2 token:
+
+**POST** `http://<IDM HOST>:<IDM PORT>/v3/auth/tokens` with header: `Content-Type: application/json`
+
+with the following body:
+```
+{
+	"name" : "admin@test.com",
+	"password" : "1234"
+}
+```
+
+As result, the response header should look like:
+
+```
+X-Subject-Token	76b2ab6b-07c2-4969-bdc8-20a9ae38dfd7
+Content-Type	application/json; charset=utf-8
+Content-Length	74
+ETag	W/"4a-kOiTbucnqOQPYmzxq/mHY9RqRuU"
+Date	Thu, 24 May 2018 11:24:35 GMT
+Connection	keep-alive
+```
+
+The new OAuth2 token can be retrieved from the header field `X-Subject-Token`, in this case: `76b2ab6b-07c2-4969-bdc8-20a9ae38dfd7`
+
+Now you can use this token to create a new role (e.g., `|GET|AirQualityObserved||`) in the context of your application (e.g., Orion Context Broker) by specifing its `CLIENT_ID`:
+
+**POST** `http://<IDM HOST>:<IDM PORT>/v1/applications/<CLIENT_ID>/roles/` with header: `X-Auth-Token: <X-Subject-Token>` and `Content-Type: application/json`
+
+with the following body:
+```
+{
+  "role": {
+    "name": "|GET|AirQualityObserved||"
+  }
+}
+```
+
+
 ## License
 
 The MIT License
