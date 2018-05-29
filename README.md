@@ -1,15 +1,13 @@
 #PEP Proxy - Wilma Plus
 
 [![License badge](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Documentation badge](https://img.shields.io/badge/docs-stable-brightgreen.svg?style=flat)](http://fiware-pep-proxy.readthedocs.org/en/stable/)
-[![Docker badge](https://img.shields.io/docker/pulls/fiware/pep-proxy.svg)](https://hub.docker.com/r/fiware/pep-proxy/)
-[![Support badge]( https://img.shields.io/badge/support-sof-yellowgreen.svg)](http://stackoverflow.com/questions/tagged/fiware)
+[![Docker badge](https://img.shields.io/docker/pulls/fiware/pep-proxy.svg)](https://hub.docker.com/r/angelocapossele/pep-proxy-accounting/)
 
 + [Introduction](#def-introduction)
 + [How to Build & Install](#def-build)
     - [Docker](#def-docker)
 + [API Overview](#def-api)
-+ [Advanced documentation](#def-advanced)
++ [Policies](#def-policies)
 + [License](#def-license)
 
 ---
@@ -193,19 +191,12 @@ After this, you will also need to run the following command on the IdM `MySQL` i
 
 `ALTER TABLE role ALTER COLUMN name VARCHAR (500) NOT NULL; `
 
-<a name="def-advanced"></a>
-## Advanced Documentation
-
-- [How to run tests](http://fiware-pep-proxy.readthedocs.org/en/latest/admin_guide#end-to-end-testing)
-- [User & Programmers Manual](http://fiware-pep-proxy.readthedocs.org/en/latest/user_guide/)
-- [Installation & Administration Guide](http://fiware-pep-proxy.readthedocs.org/en/latest/admin_guide/)
-
-<a name="def-license"></a>
 ## License
 
 The MIT License
 
-Copyright (C) 2012 Universidad Politécnica de Madrid.
+Copyright (C) 2012 Universidad Politécnica de Madrid. 
+Copyright (C) 2018 Digital Catapult.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
