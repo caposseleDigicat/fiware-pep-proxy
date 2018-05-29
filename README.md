@@ -294,13 +294,9 @@ Content-Length	0
 Date	Tue, 29 May 2018 14:46:34 GMT
 ```
 
+
 <a name="def-testing-from-7"></a>
 #### Keyrock from version 7
-
-To create new role on the Keyrock instance you have two options:
-
-* Use the web interface of the IdM
-* Use the API
 
 To create roles through the API you first need to obtain an OAuth2 token:
 
