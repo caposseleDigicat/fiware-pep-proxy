@@ -81,4 +81,4 @@ Additionally, you can terminate the different containers by executing ::
 You can also run the container from the [image we provide](https://hub.docker.com/r/angelocapossele/pep-proxy-accounting/) in Docker Hub. In this case you have only to execute the docker-compose command. But now the image name is angelocapossele/pep-proxy-accounting:*version* where `version` is the release you want to use.
 
 > **Note**
-> If you do not specify a version you are pulling from `latest` by default.
+> If you do not specify a version you are pulling from `latest` by default
